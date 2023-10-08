@@ -1,5 +1,6 @@
 package com.jobs.api.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthConfig {
     private final UserRepository userRepository;
+
+    @Value("${jwt.secret-key}")
+    private String jwtSecret;
+
+    @Bean(name = { "jwt_secret_key" })
+    public String getJwtSecretKey() {
+        return jwtSecret;
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {
