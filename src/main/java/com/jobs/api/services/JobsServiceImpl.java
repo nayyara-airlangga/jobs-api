@@ -37,7 +37,9 @@ public class JobsServiceImpl implements JobsService {
     public Resource getJobsCSV() {
         var jobs = this.getJobs();
 
-        var jobFields = Arrays.asList(Job.class.getDeclaredFields()).stream().map(field -> field.getName())
+        var jobFields = Arrays.asList(Job.class.getDeclaredFields())
+                .stream()
+                .map(field -> field.getName().replaceAll("([a-z])([A-Z]+)", "$1_$2").toLowerCase())
                 .collect(Collectors.toList()).toArray(String[]::new);
 
         ByteArrayInputStream csvStream;
