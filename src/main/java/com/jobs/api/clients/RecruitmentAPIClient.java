@@ -1,5 +1,7 @@
 package com.jobs.api.clients;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,19 @@ public class RecruitmentAPIClient {
     private String recruitmentAPIUrl;
 
     private final WebClient webClient = WebClient.create();
+
+    public List<Job> getJobs() {
+        var jobs = webClient.get()
+                .uri(recruitmentAPIUrl + "/positions.json")
+                .retrieve()
+                .onStatus(HttpStatus.INTERNAL_SERVER_ERROR::equals, resp -> {
+                    return Mono.error(InternalServerErrorException::new);
+                })
+                .bodyToMono(Job[].class)
+                .block();
+
+        return List.of(jobs);
+    }
 
     public Job getJobDetail(String jobId) {
         var job = webClient.get()
