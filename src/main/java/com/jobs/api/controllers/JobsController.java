@@ -3,6 +3,9 @@ package com.jobs.api.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +28,17 @@ public class JobsController {
     @GetMapping()
     public ResponseEntity<List<Job>> getJobs() {
         return ResponseEntity.ok(jobsService.getJobs());
+    }
+
+    @GetMapping(value = "/download", produces = "text/csv")
+    public ResponseEntity<Resource> getJobsCSV() {
+        var csvFile = jobsService.getJobsCSV();
+
+        var headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.attachment().filename("jobs.csv").build());
+        headers.set(HttpHeaders.CONTENT_TYPE, "text/csv");
+
+        return new ResponseEntity<Resource>(csvFile, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{jobId}")
