@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class LoginReq {
     @NotEmpty(message = "Username is required")
-    @Username
+    @Username(message = "Invalid username")
     private String username;
 
     // Passwords must contain at least one lowercase char, one uppercase char, one
