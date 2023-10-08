@@ -23,6 +23,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(value = { InvalidAccessTokenException.class })
+    public ResponseEntity<Object> userAlreadySignedIn(InvalidAccessTokenException e) {
+        return ResponseEntity.badRequest().body(new ExceptionWrapper(e.getMessage()));
+    }
+
     @ExceptionHandler(value = { MethodArgumentNotValidException.class })
     public ResponseEntity<Object> invalidBody(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap<>();
