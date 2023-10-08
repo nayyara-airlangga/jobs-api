@@ -5,6 +5,6 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class InternalServerErrorException extends RuntimeException {
-    private String message = "Something went wrong";
+public class JobDoesNotExistException extends RuntimeException {
+    private String message = "Job does not exist";
 }
